@@ -1,0 +1,15 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+* {
+    font-family: "Open Sans", sans-serif;
+}
+
+.flex-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

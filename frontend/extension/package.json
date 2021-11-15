@@ -11,6 +11,7 @@
         "react-multi-select-component": "^4.1.13",
         "react-router-dom": "^6.0.2",
         "react-scripts": "4.0.3",
+        "react-select": "^5.2.1",
         "sass": "^1.43.4",
         "web-vitals": "^1.1.2"
     },

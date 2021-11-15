@@ -1,40 +1,24 @@
 import "./App.scss";
-import React, { useState } from "react";
-import { MultiSelect } from "react-multi-select-component";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useCallback } from "react";
+import CreatableSelect from "react-select/creatable";
 
-const options = [{ label: "Unclassified", value: "Unclassified" }];
+// const options = ["Unclassified"];
 
 const App = () => {
-    const [selected, setSelected] = useState([]);
+    const handleChange = useCallback((newValue, actionMeta) => {
+        console.group("Value Changed");
+        console.log(newValue);
+        console.log(`action: ${actionMeta.action}`);
+        console.groupEnd();
+    });
 
     return (
         <div className="App">
-            <h2>Select Topics</h2>
-            <MultiSelect
-                options={options}
-                value={selected}
-                onChange={setSelected}
-                labelledBy="Select"
-                isCreatable="true"
-            />
-            <Router>
-                <div>
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="/about">About</Link>
-                            </li>
-                            <li>
-                                <Link to="/users">Users</Link>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </Router>
+            <div className="flex-container">
+                <h2>Select Topics</h2>
+                <button>Add Current Page</button>
+            </div>
+            <CreatableSelect isMulti onChange={handleChange} />
         </div>
     );
 };

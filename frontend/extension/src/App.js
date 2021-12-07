@@ -1,16 +1,18 @@
 import "./App.scss";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 
-// const options = ["Unclassified"];
-
 const App = () => {
-    const handleChange = useCallback((newValue, actionMeta) => {
-        console.group("Value Changed");
-        console.log(newValue);
-        console.log(`action: ${actionMeta.action}`);
-        console.groupEnd();
+    const [collectionList, setCollectionList] = useState([]);
+    
+    const handleChange = useCallback((newArray) => {
+        console.log(newArray);
+        // TODO: invoke the computation of the new collection list, then update it
+        const newList = newArray; // should be BM25 ranking function instead 
+
     });
+
+
 
     return (
         <div className="App">

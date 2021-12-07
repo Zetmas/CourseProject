@@ -53,7 +53,14 @@ const App = () => {
                     return (
                         <li>
                             <span onClick={() => handleDelete(name)}> x </span>
-                            <a href={link}>{name}</a>
+                            <a
+                                href={link}
+                                onClick={() =>
+                                    chrome.tabs.create({ url: link })
+                                }
+                            >
+                                {name}
+                            </a>
                         </li>
                     );
                 })}

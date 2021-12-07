@@ -28,3 +28,14 @@ span {
     cursor: pointer;
     color: red;
 }
+
+a {
+    text-decoration: none;
+}
+a:link,
+a:visited {
+    color: blue;
+}
+a:hover {
+    color: red;
+}

@@ -1,18 +1,24 @@
 import "./App.scss";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect } from "react";
+import { useChromeStorageLocal } from "use-chrome-storage";
 import CreatableSelect from "react-select/creatable";
 
 const App = () => {
-    const [collectionList, setCollectionList] = useState([]);
-    
+    const [storageList, setStorageList, isPersistent, error] =
+        useChromeStorageLocal("bookmarks", []);
+
     const handleChange = useCallback((newArray) => {
         console.log(newArray);
         // TODO: invoke the computation of the new collection list, then update it
-        const newList = newArray; // should be BM25 ranking function instead 
-
+        setStorageList([
+            ...storageList,
+            { name: "test", link: "www.google.com" },
+        ]);
     });
 
-
+    useEffect(() => {
+        console.log(storageList);
+    }, [storageList]);
 
     return (
         <div className="App">
@@ -21,6 +27,15 @@ const App = () => {
                 <button>Add Current Page</button>
             </div>
             <CreatableSelect isMulti onChange={handleChange} />
+            <ul>
+                {storageList.map(({ name, link }) => {
+                    return (
+                        <li>
+                            {name}: {link}
+                        </li>
+                    );
+                })}
+            </ul>
         </div>
     );
 };

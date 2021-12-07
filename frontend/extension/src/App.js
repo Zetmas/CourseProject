@@ -10,13 +10,12 @@ const App = () => {
 
     const [displayList, setDisplayList] = useState(storageList);
 
+    const [keywords, setKeywords] = useState([]);
+
     const handleChange = useCallback((newArray) => {
-        console.log(newArray);
-        // // TODO: invoke the computation of the new collection list, then update it
-        // setStorageList([
-        //     ...storageList,
-        //     { name: "test", link: "www.google.com" },
-        // ]);
+        const newKeywords = newArray.map(({ value }) => value);
+        setKeywords(newKeywords);
+        computeDisplayList(newKeywords);
     });
 
     const handleSubmit = useCallback(() => {
@@ -26,8 +25,14 @@ const App = () => {
         });
     });
 
+    const computeDisplayList = useCallback((keywords) => {
+        // TODO: invoke the text ranking computation
+        console.log(keywords);
+        setDisplayList(storageList);
+    });
+
     useEffect(() => {
-        console.log(storageList);
+        computeDisplayList(keywords);
     }, [storageList]);
 
     return (
@@ -38,7 +43,7 @@ const App = () => {
             </div>
             <CreatableSelect isMulti onChange={handleChange} />
             <ul>
-                {storageList.map(({ name, link }) => {
+                {displayList.map(({ name, link }) => {
                     return (
                         <li>
                             {name}: {link}

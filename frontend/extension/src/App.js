@@ -21,8 +21,14 @@ const App = () => {
     const handleSubmit = useCallback(() => {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
             const { title, url } = tabs[0];
-            setStorageList([...storageList, { name: title, link: url }]);
+            if (!storageList.find(({ name }) => name === title)) {
+                setStorageList([...storageList, { name: title, link: url }]);
+            }
         });
+    });
+
+    const handleDelete = useCallback((name) => {
+        setStorageList(storageList.filter((value) => value.name !== name));
     });
 
     const computeDisplayList = useCallback((keywords) => {
@@ -46,7 +52,8 @@ const App = () => {
                 {displayList.map(({ name, link }) => {
                     return (
                         <li>
-                            {name}: {link}
+                            <span onClick={() => handleDelete(name)}> x </span>
+                            <a href={link}>{name}</a>
                         </li>
                     );
                 })}

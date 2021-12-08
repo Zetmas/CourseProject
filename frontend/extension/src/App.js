@@ -44,7 +44,7 @@ const App = () => {
     return (
         <div className="App">
             <div className="flex-container">
-                <h2>Select Topics</h2>
+                <h2>Smart Bookmarks</h2>
                 <button onClick={handleSubmit}>Add Current Page</button>
             </div>
             <CreatableSelect isMulti onChange={handleChange} />

@@ -32,9 +32,9 @@ const App = () => {
                         {
                             name: title,
                             link: url,
-                            content: title + title + title,
+                            content: tabContent,
                         },
-                    ]); // TODO: content actually should be getContent(title)
+                    ]); 
                 }
             }
         );
@@ -62,17 +62,11 @@ const App = () => {
                                 if (response.method == "getText") {
                                     let textString = response.data;
                                     resolve(textString);
-                                    //  console.log("return result",textString);
                                 }
                             }
                         );
                     }
                 );
-                // chrome.tabs.query({
-                //     active: true,
-                // }, function (tabs) {
-                //     resolve(tabs[0].id);
-                // })
             } catch (e) {
                 reject(e);
             }

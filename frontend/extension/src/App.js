@@ -22,7 +22,7 @@ const App = () => {
     const handleSubmit = useCallback(() => {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
             const { title, url } = tabs[0];
-            let comProm = getContentValue();
+            let tabContent = getContentValue();
             console.log("this is tab Content: ", tabContent);
             if (!storageList.find(({ name }) => name === title)) {
                 setStorageList([
@@ -46,7 +46,7 @@ const App = () => {
     });
 
     async function getContentValue(){
-        let contentText = await getContent();
+        let contentText = await getContent()
         return contentText;
     }
 

@@ -22,6 +22,8 @@ const App = () => {
     const handleSubmit = useCallback(() => {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
             const { title, url } = tabs[0];
+            let comProm = getContentValue();
+            console.log("this is tab Content: ", tabContent);
             if (!storageList.find(({ name }) => name === title)) {
                 setStorageList([
                     ...storageList,
@@ -42,6 +44,36 @@ const App = () => {
     const updateDisplayList = useCallback((keywords) => {
         setDisplayList(searchQuery(keywords));
     });
+
+    async function getContentValue(){
+        let contentText = await getContent();
+        return contentText;
+    }
+
+    function getContent(){
+        return new Promise((resolve, reject) => {
+            try {
+                
+                chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+                    console.log("tab id",tabs[0].id)
+                    chrome.tabs.sendMessage(tabs[0].id, { method: "getText" }, function (response) {
+                         if(response.method=="getText"){
+                           let textString = response.data;
+                           resolve(textString);
+                            //  console.log("return result",textString);
+                        }
+                    });
+                })
+                // chrome.tabs.query({
+                //     active: true,
+                // }, function (tabs) {
+                //     resolve(tabs[0].id);
+                // })
+            } catch (e) {
+                reject(e);
+            }
+        })
+    };
 
     useEffect(() => {
         buildIndex(storageList);

@@ -3,6 +3,7 @@ import "./App.scss";
 import React, { useCallback, useEffect, useState } from "react";
 import { useChromeStorageLocal } from "use-chrome-storage";
 import CreatableSelect from "react-select/creatable";
+import { buildIndex, searchQuery } from "./Utils/bm_25";
 
 const App = () => {
     const [storageList, setStorageList, isPersistent, error] =
@@ -15,39 +16,79 @@ const App = () => {
     const handleChange = useCallback((newArray) => {
         const newKeywords = newArray.map(({ value }) => value);
         setKeywords(newKeywords);
-        computeDisplayList(newKeywords);
+        updateDisplayList(newKeywords);
     });
 
-    const handleSubmit = useCallback(() => {
-        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-            const { title, url } = tabs[0];
-            if (!storageList.find(({ name }) => name === title)) {
-                setStorageList([...storageList, { name: title, link: url }]);
+    const handleSubmit = () => {
+        chrome.tabs.query(
+            { active: true, lastFocusedWindow: true },
+            async (tabs) => {
+                const { title, url } = tabs[0];
+                const tabContent = await getContent();
+                console.log("this is tab Content: ", tabContent);
+                if (!storageList.find(({ name }) => name === title)) {
+                    setStorageList([
+                        ...storageList,
+                        {
+                            name: title,
+                            link: url,
+                            content: tabContent,
+                        },
+                    ]); 
+                }
             }
-        });
-    });
+        );
+    };
 
     const handleDelete = useCallback((name) => {
         setStorageList(storageList.filter((value) => value.name !== name));
     });
 
-    const computeDisplayList = useCallback((keywords) => {
-        // TODO: invoke the text ranking computation
-        console.log(keywords);
-        setDisplayList(storageList);
+    const updateDisplayList = useCallback((keywords) => {
+        setDisplayList(searchQuery(keywords));
     });
 
+    function getContent() {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.tabs.query(
+                    { currentWindow: true, active: true },
+                    function (tabs) {
+                        console.log("tab id", tabs[0].id);
+                        chrome.tabs.sendMessage(
+                            tabs[0].id,
+                            { method: "getText" },
+                            function (response) {
+                                if (response.method == "getText") {
+                                    let textString = response.data;
+                                    resolve(textString);
+                                }
+                            }
+                        );
+                    }
+                );
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
     useEffect(() => {
-        computeDisplayList(keywords);
+        buildIndex(storageList);
+        updateDisplayList(keywords);
     }, [storageList]);
 
     return (
         <div className="App">
             <div className="flex-container">
-                <h2>Select Topics</h2>
+                <h2>Smart Bookmarks</h2>
                 <button onClick={handleSubmit}>Add Current Page</button>
             </div>
             <CreatableSelect isMulti onChange={handleChange} />
+            <p>
+                Note that the smart search only works with more than two
+                bookmarks
+            </p>
             <ul>
                 {displayList.map(({ name, link }) => {
                     return (

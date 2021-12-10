@@ -1,20 +1,55 @@
-# CourseProject
+# CS 410 Course project---Smart Bookmarks
+Group member: Zehao Miao, Fan Wu, Zuhua Cao
 
-1. Overview of the function of the code:
-   Our code could be seperated into three main parts: the frontend, algorigtms and datasets. 
-   As for the frontend, the code in this folder will contains the basic implementations of user interface and BM25 algorithm. It constructs a concise and beautful chrome extention called "smart bookmark" and define several usages of it. And then it connects with our input from web scaper and send them to algorithm code so it returns the matched list as output. 
-   As for the datasets, there is a folder called dataset. It contains the test case info by the page crawler function. 
-   As for the algorithm, it's located in frontend/extention/src/utils. It simply implements the BM25 algorithm and it makes interactions with the frontend. 
-   
-2. How the software is implemented:
-   This software is bulit based on React app. It mainly contains three parts: the frontend, algorigtms and datasets. 
-   As for the frontend, there is a folder called frontend in the main. Here, it implements a concise chrome extention for our users based on React App. In the frontend/extention/public folder, the code is used to implement the public function of this extension. In the frontend/extention/src folder, App.js contains the main code to implement the smart bookmark function. It will collect the webpage information from page scraper and transform it into the standerd input format so that bm_25 algorithm could deal with it. Then it will handle the output matched items based on the input queries. Also, it contains the main functios of the plugin's interface, such as "add current page" and "delete this page". App.test.js is a simple web test file for validating the correctness of the extention.
-   As for the datasets, there is a folder called dataset. It contains the test dataset that we need for validing the correctness of our algorithm and extention. The tag_index is a file that contains the url that we scraped. The extract_docs.py is used to crawl all text info from a webpage. Then all of these text info is stored in docs.txt. 
-   As for the algorithm, it's located in frontend/extention/src/utils. This is the code that take the keywords(query) and list(name, link, text) as input and it computes matched list with the highest score based on BM25. So it firstly pre-process the text by eliminating the stop words and stem, then it processes the input and filter the mathced list as the output.  
+This is a Chrome Extension aiming to help users group their bookmarks intelligently. The extension will classify all bookmarks based on the given keyword list by inputting keywords. 
 
-3. The usage of the software:
-  
-4. Brief description of contribution of each team member:
-   As for Miao Zehao, he builds up the constructure of the frontend part(the smart bookmark) based on React. For the user interface design, he designed the UI logic implementation and styling and wrote the code of intection between the algorithm and frontend. Also, he connected the instant web scraper with the frontend so that we could get the web's text info when we added this web into the bookmark. 
-   As for Wu Fan, she wrote two web scrpars for getting the whole text infomation from the webpage. Also, she built up the test case datasets and collected a great number of urls for validating the correctness of our algorithm.
-   As for Cao Zuhua, he built up the BM25 algorigtm based on the format needs from frontend and return the formatted output to frontend. Also, he wrote the most part of the documentation. 
+## Installation & set up
+
+```
+# Download the current repository.
+git clone https://github.com/Zetmas/CourseProject.git
+```
+Go to path /CourseProject/frontend/extension/src. 
+
+**Note:** The extension is based on React.js. You need to ensure you have the latest node.js, npm, and Recat.js installed to build it.
+
+```
+# Build the extension:
+npm run build
+```
+Generally, if this command executes successfully, it will generate a new folder called: build.
+
+Now you can try to load this build into your Chrome Browser.
+- Go to chrome://extensions/
+- Make sure you are in developer mode. 
+- Click the top-left button "Load unpacked"
+- Select the build folder as the path.
+- You can try this new extension now!
+
+## Overview of the function of the code: 
+
+The smart bookmark extension can divide into three functional parts: frontend (UI Interface), web scraper, classification algorithm, and datasets(for the test). 
+
+Frontend: This part serves as a simple user interface where users can input keywords, add current web pages as bookmarks, and list the classified bookmark groups.
+- Web scraper function: When a new webpage is added as a bookmark, the scraper will immediately be called. It runs a script in content.js to extract all text information inside the target webpage and save the content into a newly created bookmark object.
+- Classification algorithm: When a list of keywords is input by the user. The algorithm function is called. It first preprocesses the raw text data, removes punctuations, stops words, etc. For classification, we use the BM25 algorithm to do the job. The algorithm will take a keyword as a search query and take the top 10 most related results as the return value. The core bm25 function uses an external library: wink-bm25-text-search.
+
+
+## How the software is implemented: 
+
+The frontend is based on the React.js framework. All algorithm-related functions and webpage scraper are implemented using Javascript.
+
+- Frontend: inside the frontend folder. The main code is in /extention/src/App.js, including the HTML part of the extension. It collects the webpage information from the page scraper and transforms it into the standard input format so that the bm_25 algorithm can deal with it. Then it will handle the output matched items based on the input queries. Also, it contains the main functions of the plugin's interface, such as "add current page" and "delete this page". App.test.js is a simple web test file for validating the correctness of the extension. 
+
+- Web scraper function: This function is only called when a new webpage is added as a bookmark. It will send a message from the popup.js (App.js) and ask the content script(/public/content.js) to return inner text inside the current tab.
+
+- Classification algorithm: It's located in frontend/extension/src/utils. The algorithm takes the keywords(query), and list(name, link, text) as input, and it computes matched list with the highest score based on BM25. So it firstly preprocesses the text by eliminating the stop words and stem, then processes the input and filters the matched list as the output.
+
+- Dataset: It contains the test dataset that we need for validating the correctness of our algorithm and extension. The tag_index is a file that contains the URL that we scraped. The extract_docs.py is used to crawl all text info from a webpage. Then all of this text info is stored in docs.txt. 
+
+## Brief description of the contribution of each team member: 
+Zehao Miao: He builds up the structure of the frontend part(the smart bookmark) based on React. He designed the UI logic implementation and styling for the user interface design and wrote the code of interaction between the algorithm and frontend. 
+
+Fan Wu: She's responsible for the web scraper function to get the web page's full-text information. Besides, she built up the test case dataset and collected a great number of URLs to validate our algorithm's correctness. She also wrote to the documentation. 
+
+Zuhua Cao: He built up the BM25 algorithm based on the frontend format needs and returned the formatted output to the frontend. In addition, he is the original author of this documentation.

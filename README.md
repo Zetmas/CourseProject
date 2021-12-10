@@ -11,9 +11,11 @@ git clone https://github.com/Zetmas/CourseProject.git
 ```
 Go to path /CourseProject/frontend/extension/src. 
 
-**Note:** The extension is based on React.js. You need to ensure you have the latest node.js, npm, and Recat.js installed to build it.
+**Note:** The extension is based on React.js. You need to ensure you have the latest node.js, npm installed to build it.
 
 ```
+# Install the packages
+npm install
 # Build the extension:
 npm run build
 ```

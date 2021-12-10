@@ -30,7 +30,7 @@ Now you can try to load this build into your Chrome Browser.
 
 The smart bookmark extension can divide into three functional parts: frontend (UI Interface), web scraper, classification algorithm, and datasets(for the test). 
 
-Frontend: This part serves as a simple user interface where users can input keywords, add current web pages as bookmarks, and list the classified bookmark groups.
+- Frontend: This part serves as a simple user interface where users can input keywords, add current web pages as bookmarks, and list the classified bookmark groups.
 - Web scraper function: When a new webpage is added as a bookmark, the scraper will immediately be called. It runs a script in content.js to extract all text information inside the target webpage and save the content into a newly created bookmark object.
 - Classification algorithm: When a list of keywords is input by the user. The algorithm function is called. It first preprocesses the raw text data, removes punctuations, stops words, etc. For classification, we use the BM25 algorithm to do the job. The algorithm will take a keyword as a search query and take the top 10 most related results as the return value. The core bm25 function uses an external library: wink-bm25-text-search.
 
